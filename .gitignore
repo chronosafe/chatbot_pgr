@@ -1,1 +1,7 @@
-./venv
+.venv/
+main/
+faiss_index/
+__pycache__/
+
+Untitled.ipynb
+.ipynb_checkpoints/Untitled-checkpoint.ipynb
