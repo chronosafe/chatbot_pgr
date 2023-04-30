@@ -9,7 +9,7 @@ from langchain.prompts import PromptTemplate
 
 import os
 
-class QueryProvider:
+class RetrievalQAQueryProvider:
     def __init__(self, store):
         self.store = store
         prompt_template = """You are Flo, the friendly Progressive Insurance bot.  Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -25,13 +25,13 @@ class QueryProvider:
     def query(self, question):
         return self.qa.run(question)
 
-class StoreProvider:
+class PDFStoreProvider:
     def __init__(self, filename):
         self.filename = filename
     
     def store(self):
-        openai_api_key = "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"
-        os.environ["OPENAI_API_KEY"] = openai_api_key
+        # openai_api_key = "OPENAI_API_KEY"
+        # os.environ["OPENAI_API_KEY"] = openai_api_key
 
         embeddings = OpenAIEmbeddings()
         if os.path.exists("./faiss_index"):
@@ -49,7 +49,7 @@ class StoreProvider:
 
         return vectorstore
 
-class PGROracle():
+class AnswerBot():
 
     def __init__(self, query):
         self.query = query

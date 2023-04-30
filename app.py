@@ -6,15 +6,15 @@
 # pip install faiss-cpu
 
 from flask import Flask, render_template, request, jsonify
-from classes import PGROracle, StoreProvider, QueryProvider
+from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider
 
 app = Flask(__name__)
 
 questions = []
-provider = StoreProvider("./AnswersList.pdf")
+provider = PDFStoreProvider("./AnswersList.pdf")
 store = provider.store()
-query = QueryProvider(store)
-bot = PGROracle(query)
+query = RetrievalQAQueryProvider(store)
+bot = AnswerBot(query)
 
 @app.route('/')
 def index():
