@@ -6,14 +6,14 @@
 # pip install faiss-cpu
 
 from flask import Flask, render_template, request, jsonify
-from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider
+from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider, ConversationalQueryProvider
 
 app = Flask(__name__)
 
 questions = []
 provider = PDFStoreProvider("./AnswersList.pdf")
 store = provider.store()
-query = RetrievalQAQueryProvider(store)
+query = ConversationalQueryProvider(store)
 bot = AnswerBot(query)
 
 @app.route('/')
@@ -32,6 +32,7 @@ def ask_question():
 def clear_questions():
     global questions
     questions = []
+    query.clear_history()
     return jsonify({"status": "success"})
 
 if __name__ == '__main__':

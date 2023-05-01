@@ -1,6 +1,5 @@
 .venv/
 main/
-faiss_index/
 __pycache__/
 
 Untitled.ipynb
