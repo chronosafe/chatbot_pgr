@@ -91,7 +91,7 @@ class AnswerBot():
     def get_answer(self, question):
         answer = self.query.query(question)
         self.query.add_to_history(question, answer)
-        return "Flo says: " + answer
+        return answer
 
     
     

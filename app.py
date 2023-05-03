@@ -20,6 +20,18 @@ bot = AnswerBot(query)
 def index():
     return render_template('index.html', questions=questions)
 
+@app.route('/chat')
+def chat():
+    return render_template('chat.html', questions=questions)
+
+@app.route('/chat/ask', methods=['POST'])
+def ask_chat_question():
+    question = request.form.get('question')
+    answer = bot.get_answer(question)
+    questions.append( {"question": question, "answer": answer})
+    rendered_template = render_template('flo_chat.html', q={"question": question, "answer": answer})
+    return jsonify({"template": rendered_template})
+
 @app.route('/ask', methods=['POST'])
 def ask_question():
     question = request.form.get('question')

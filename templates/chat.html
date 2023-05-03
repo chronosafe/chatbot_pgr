@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Flo - Progressive Insurance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="apple-touch-icon" href="https://www.progressive.com/apple-touch-icon.png">
+	<link rel="shortcut icon" href="https://www.progressive.com/favicon.ico" type="image/x-icon">
+	<link rel="icon" type="image/ico" href="https://www.progressive.com/favicon.ico">
+</head>
+
+<style>
+
+    .scroller {
+    overflow: auto;
+    height: 100px;
+    display: flex;
+    flex-direction: column-reverse;
+    }
+
+    .scroller .scroller-content .item {
+    height: 20px;
+    transform: translateZ(0); /* fixes a bug in Safari iOS where the scroller doesn't update */
+    }
+
+    .ask-flo-logo {
+        width: 180px;
+    }
+
+    .logo-progressive {
+        width: 200px;
+    }
+
+    body {
+        background-color: #408DCC;
+    }
+
+    a.nav-link {
+        color: gray;
+        font-size: 18px;
+        padding: 0;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #e84118;
+        padding: 2px;
+        flex: none;
+    }
+
+    input:focus {
+        outline: 0px !important;
+        box-shadow: none !important;
+    }
+
+    .card-text {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background-color: #ddd;
+    }
+
+    .bot-card-text {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        color: white;
+        background-color: #0C4993;
+    }
+</style>
+
+<body>
+    <div class="container mt-4">
+        <div class="card mx-auto" style="max-width:600px">
+            <div class="card-header bg-transparent">
+                <div class="navbar navbar-expand p-0">
+                    <ul class="navbar-nav me-auto align-items-center">
+                        <li class="nav-item">
+                            <a href="#!" class="nav-link "><img  class="ask-flo-logo" src="{{ url_for('static', filename='ask-flo-logo.png')}}" alt=""></a>
+                        </li>
+                    </ul>
+                    <img src="{{ url_for('static', filename='logo-progressive.svg')}}" alt="" class="logo-progressive">
+                </div>
+            </div>
+            <div class="card-body p-4 scroller" style="height: 550px; overflow: auto; margin-bottom: 20px;">
+                <div class="scroller-content" id="scrollerContent">
+                <div class="d-flex align-items-baseline mb-4">
+                    <div class="position-relative avatar">
+                        <img src="{{ url_for('static', filename='flo.jpeg') }}"
+                            class="img-fluid rounded-circle" alt="">
+                        <span
+                            class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
+                    </div>
+                    <div class="pe-2">
+                        <div>
+                            <div class="card bot-card-text d-inline-block p-2 px-3 m-1">Hi there! Welcome to Progressive. What can I do to help?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="questions-container" >
+                    {% for q in questions %}
+                    {% include 'flo_chat.html' %}
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+            <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+                <!-- <div class="input-group">
+                    <input type="text" class="form-control border-0" placeholder="How can we help?" id="question">
+                    <div class="input-group-text bg-transparent border-0">
+                        <button class="btn btn-light text-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div> -->
+                <form id="question-form" class="form-inline">
+                    <div class="input-group">
+                        <input type="text" id="question" name="question" class="form-control" placeholder="Ask your question!" required>
+                        <button type="submit" class="btn btn-light ml-2"><i class="fa fa-search"></i></button>
+                        <button type="button" class="btn clear-btn ml-2" id="clear-questions"><i class="fa fa-trash"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</body>
+
+</html>
