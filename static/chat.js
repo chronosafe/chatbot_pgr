@@ -1,6 +1,11 @@
+$(function() {
+    showLoading(false);
+});
+
 document.getElementById("question-form").addEventListener("submit", function (event) {
     event.preventDefault();
     let question = document.getElementById("question").value;
+    showLoading(true);
     $.ajax({
         url: "/chat/ask",
         method: "POST",
@@ -11,7 +16,7 @@ document.getElementById("question-form").addEventListener("submit", function (ev
             let questionsContainer = document.getElementById("questions-container");
             questionsContainer.append(answerDiv, questionsContainer.lastChild);
             document.getElementById("question").value = "";
-            scrollSmoothlyToBottom("questions-container");
+            showLoading(false);
         }
     });
 });
@@ -39,9 +44,13 @@ document.getElementById("clear-questions").addEventListener("click", function ()
     });
 });
 
-const scrollSmoothlyToBottom = (id) => {
-    const element = $(`#${id}`);
-    element.animate({
-        scrollTop: element.prop("scrollHeight")
-    }, 500);
+// using the processing.gif image show a loading animation when flag is true and hide the anmiaton when flag is false   
+const showLoading = (flag = true) => {
+    const loading = $("#loading");
+    console.log("loading");
+    if (flag) {
+        loading.show();
+    } else {
+        loading.hide();
+    }
 }

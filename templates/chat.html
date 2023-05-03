@@ -16,6 +16,11 @@
 
 <style>
 
+    .progress {
+        width: 150px;
+        height: 50px;
+    }
+
     .scroller {
     overflow: auto;
     height: 100px;
@@ -110,6 +115,9 @@
                     {% for q in questions %}
                     {% include 'flo_chat.html' %}
                     {% endfor %}
+                </div>
+                <div id="loading">
+                    <img src="{{ url_for('static', filename='processing.gif')}}" class='progress' alt="" />
                 </div>
                 </div>
             </div>
