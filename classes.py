@@ -4,7 +4,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores.faiss import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain import OpenAI
-from langchain.document_loaders import PyPDFLoader
+from langchain.document_loaders import PyPDFLoader, CSVLoader
 from langchain.prompts import PromptTemplate
 import os
 
@@ -58,6 +58,28 @@ class RetrievalQAQueryProvider:
         pass
 
 # Provides the store for the index
+class CSVStoreProvider:
+    def __init__(self, filename):
+        self.filename = filename
+    
+    def store(self):
+        # openai_api_key = "OPENAI_API_KEY"
+        # os.environ["OPENAI_API_KEY"] = openai_api_key
+
+        embeddings = OpenAIEmbeddings()
+        if os.path.exists("./faiss_index_csv"):
+            print("loaded from index")
+            vectorstore = FAISS.load_local("faiss_index_csv", embeddings)
+        else:
+            loader = CSVLoader(self.filename, csv_args={"delimiter": ","})
+            pages = loader.load()
+            print(f"Loaded from csv {self.filename}")
+            vectorstore = FAISS.from_documents(pages, embeddings)
+            vectorstore.save_local("faiss_index_csv")
+
+        return vectorstore
+
+# Provides the store for the index
 class PDFStoreProvider:
     def __init__(self, filename):
         self.filename = filename
@@ -71,10 +93,9 @@ class PDFStoreProvider:
             print("loaded from index")
             vectorstore = FAISS.load_local("faiss_index", embeddings)
         else:
-            pdf_path = "./AnswersList.pdf"
-            loader = PyPDFLoader(pdf_path)
+            loader = PyPDFLoader(self.filename)
             pages = loader.load_and_split()
-            print("Loaded from documents")
+            print(f"Loaded from documents: {self.filename}")
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=50)
             texts = text_splitter.split_documents(pages)
             vectorstore = FAISS.from_documents(texts, embeddings)

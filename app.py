@@ -4,16 +4,19 @@
 # pip install pypdf
 # pip install tiktoken
 # pip install faiss-cpu
+# pip install gunicorn
 
 from flask import Flask, render_template, request, jsonify
-from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider, ConversationalQueryProvider
+from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider, ConversationalQueryProvider, CSVStoreProvider
 
 app = Flask(__name__)
 
 questions = []
-provider = PDFStoreProvider("./AnswersList.pdf")
+# provider = PDFStoreProvider("./data/AnswersList.pdf")
+provider = CSVStoreProvider("./data/terms.csv")
 store = provider.store()
-query = ConversationalQueryProvider(store)
+# query = ConversationalQueryProvider(store)
+query = RetrievalQAQueryProvider(store)
 bot = AnswerBot(query)
 
 @app.route('/')
