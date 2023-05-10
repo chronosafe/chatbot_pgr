@@ -18,10 +18,13 @@ bot = AnswerBot(query)
 
 @app.route('/')
 def index():
+    ip_addr = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     return render_template('index.html', questions=questions)
 
 @app.route('/chat')
 def chat():
+    # keep track of ip address of client for session
+    ip_addr = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     return render_template('chat.html', questions=questions)
 
 @app.route('/chat/ask', methods=['POST'])
