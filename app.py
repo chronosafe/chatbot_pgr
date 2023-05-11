@@ -8,12 +8,13 @@
 
 from flask import Flask, render_template, request, jsonify
 from classes import AnswerBot, PDFStoreProvider, RetrievalQAQueryProvider, ConversationalQueryProvider, CSVStoreProvider
+import html
 
 app = Flask(__name__)
 
 questions = []
 # provider = PDFStoreProvider("./data/AnswersList.pdf")
-provider = CSVStoreProvider("./data/glossary.csv")
+provider = CSVStoreProvider("./data/dig_data.csv")
 store = provider.store()
 # query = ConversationalQueryProvider(store)
 query = RetrievalQAQueryProvider(store)
@@ -43,7 +44,7 @@ def ask_question():
     question = request.form.get('question')
     answer = bot.get_answer(question)
     questions.insert(0, {"question": question, "answer": answer})
-    rendered_template = render_template('question_answer.html', q={"question": question, "answer": answer})
+    rendered_template = render_template('question_answer.html', q={"question": question, "answer": html.unescape(answer)})
     return jsonify({"template": rendered_template})
 
 @app.route('/clear', methods=['POST'])

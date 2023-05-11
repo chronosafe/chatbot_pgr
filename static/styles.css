@@ -4,6 +4,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+a {
+    color: #f4ca0d;
+}
+
 #logo {
     width: 400px;
     height: 160px;

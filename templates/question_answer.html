@@ -1,5 +1,5 @@
 <!-- question_answer.html -->
 <div class="answer">
     <div class="question">{{ q.question.upper() }}</div>
-    <div>{{ q.answer }}</div>
+    <div>{{ q.answer | safe }}</div>
 </div>

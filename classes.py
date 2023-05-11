@@ -39,11 +39,23 @@ class ConversationalQueryProvider:
 
 # This class does not have a history of the conversation
 class RetrievalQAQueryProvider:
+
+    SMEs = {"Claims": "John Holt", "Special Lines": "Susan Day", "Underwriting": "Sai Kanakala","MNA Mobile": "Evan Anger"}
+
+
+    def format_smes(self, smes):
+        return "\n".join([f"{key} - {value}" for key, value in smes])
+
     def __init__(self, store):
         self.store = store
-        prompt_template = """You are Flo, the friendly Progressive Insurance bot.  Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+        prompt_template = """You are Flo, the friendly DIG bot.  Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
+        Subject matter experts are: Claims expert is John Holt at 1-440-555-1212 or jholt@progressive.com, Special Lines expert is Susan Day at 1-440-555-2000 or sday@progressive.com, Underwriting expert is Sai Kanakala, Mobile expert is Evan Anger
+        
         {context}
+
+        Any URLs please wrap in html A tag so they show up as a link, e.g. <a target="_blank" href="https://www.progressive.com">Progressive</a>. Make the text of the link the Technical Name followed by the description.
+        Display a list as an HTML UL tag, e.g. <ul><li>Item 1</li><li>Item 2</li></ul>
 
         Question: {question}
         Answer in a congenial tone:"""
