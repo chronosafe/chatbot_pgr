@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 questions = []
 # provider = PDFStoreProvider("./data/AnswersList.pdf")
-provider = CSVStoreProvider("./data/terms.csv")
+provider = CSVStoreProvider("./data/glossary.csv")
 store = provider.store()
 # query = ConversationalQueryProvider(store)
 query = RetrievalQAQueryProvider(store)
