@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 questions = []
 # provider = PDFStoreProvider("./data/AnswersList.pdf")
-provider = CSVStoreProvider("./data/dig_data.csv")
+provider = CSVStoreProvider("./data/dig_data_demo.csv")
 store = provider.store()
 # query = ConversationalQueryProvider(store)
 query = RetrievalQAQueryProvider(store)

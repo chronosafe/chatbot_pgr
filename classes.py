@@ -42,24 +42,33 @@ class RetrievalQAQueryProvider:
 
     SMEs = {"Claims": "John Holt", "Special Lines": "Susan Day", "Underwriting": "Sai Kanakala","MNA Mobile": "Evan Anger"}
 
+    link  = """
+        Create Html A tags by using the Technical Name as the text and the Document Location as the HREF.
+        Display a list as an HTML UL tag, e.g. <ul><li>Item 1</li><li>Item 2</li></ul>
+    """
 
     def format_smes(self, smes):
         return "\n".join([f"{key} - {value}" for key, value in smes])
 
     def __init__(self, store):
-        self.store = store
-        prompt_template = """You are Flo, the friendly DIG bot.  Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
-        Subject matter experts are: Claims expert is John Holt at 1-440-555-1212 or jholt@progressive.com, Special Lines expert is Susan Day at 1-440-555-2000 or sday@progressive.com, Underwriting expert is Sai Kanakala, Mobile expert is Evan Anger
-        
+        self.store = store
+        prompt_template = """You are the friendly DIG bot.  Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
         {context}
 
-        Any URLs please wrap in html A tag so they show up as a link, e.g. <a target="_blank" href="https://www.progressive.com">Progressive</a>. Make the text of the link the Technical Name followed by the description.
-        Display a list as an HTML UL tag, e.g. <ul><li>Item 1</li><li>Item 2</li></ul>
-
+        Question: gps code
+        Answer: Are you looking for the GPS Code values? Or where to find the current active GPS Codes?
+        Question: find the source
+        Answer: I found 3 sources listed in the DIG System. Would you like to list them?
+        Question: list the sources
+        Answer: Here are the sources I found: <ul><li><a href=""#"">Claims Data Warehouse</a></li><li><a href=""#"">Personal Lines Data Warehouse</a></li><li><a href=""https://edm-dig-prod.prod.glb.pgrcloud.app/data-catalog"">Commercial Lines Data Warehouse</a></li></ul>
+        Question: who do I contact for claims questions?
+        Answer: John Holt is the SME for Claims.  He can be reached at (440) 202-1234 or <a href="enail:jholt@progressive.com">jholt@progressive.com</a>.
+        
         Question: {question}
-        Answer in a congenial tone:"""
-        PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+        Answer:"""
+        PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question",])
         chain_type_kwargs = {"prompt": PROMPT}
         self.qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=self.store.as_retriever(), chain_type_kwargs=chain_type_kwargs)
     
@@ -68,6 +77,9 @@ class RetrievalQAQueryProvider:
     
     def add_to_history(self, question, answer):
         pass
+
+    def clear_history(self):
+        self.history = []
 
 # Provides the store for the index
 class CSVStoreProvider:
@@ -86,6 +98,9 @@ class CSVStoreProvider:
             loader = CSVLoader(self.filename, csv_args={"delimiter": ","})
             pages = loader.load()
             print(f"Loaded from csv {self.filename}")
+            # text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=50)
+            # texts = text_splitter.split_documents(pages)
+
             vectorstore = FAISS.from_documents(pages, embeddings)
             vectorstore.save_local("faiss_index_csv")
 

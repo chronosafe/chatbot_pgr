@@ -12,9 +12,12 @@ document.getElementById("question-form").addEventListener("submit", function (ev
         data: { "question": question },
         success: function (response) {
             let answerDiv = document.createElement("div");
-            answerDiv.innerHTML = response.template;
             let questionsContainer = document.getElementById("questions-container");
-            questionsContainer.append(answerDiv, questionsContainer.lastChild);
+            console.log(answerDiv)
+            if (answerDiv != null && questionsContainer != null) {
+                answerDiv.innerHTML = response.template;
+                questionsContainer.append(answerDiv, questionsContainer.lastChild); 
+            }
             document.getElementById("question").value = "";
             showLoading(false);
         }

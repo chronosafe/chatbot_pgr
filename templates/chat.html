@@ -41,6 +41,10 @@
         max-width: 200px;
     }
 
+    a {
+        color: #f4ca0d;
+    }
+
     body {
         background-color: #408DCC;
     }
@@ -93,41 +97,33 @@
             </div>
             <div class="card-body p-4 scroller" style="height: 550px; overflow: auto; margin-bottom: 20px;">
                 <div class="scroller-content" id="scrollerContent">
-                <div class="d-flex align-items-baseline mb-4">
-                    <div class="position-relative avatar">
-                        <img src="{{ url_for('static', filename='flo_avatar.jpg') }}"
-                            class="img-fluid rounded-circle" alt="">
-                        <span
-                            class="position-absolute bottom-0 start-100 translate-middle p-1 border border-light rounded-circle">
-                        </span>
-                    </div>
-                    <div class="pe-2">
-                        <div>
-                            <div class="card bot-card-text d-inline-block p-2 px-3 m-1">Welcome friend! I 💙 to help you find what you're looking for!  What do you need to know today?
+                    <div class="d-flex align-items-baseline mb-4">
+                        <div class="position-relative avatar">
+                            <img src="{{ url_for('static', filename='flo_avatar.jpg') }}"
+                                class="img-fluid rounded-circle" alt="">
+                            <span
+                                class="position-absolute bottom-0 start-100 translate-middle p-1 border border-light rounded-circle">
+                            </span>
+                        </div>
+                        <div class="pe-2">
+                            <div>
+                                <div class="card bot-card-text d-inline-block p-2 px-3 m-1">Welcome friend! I 💙 to help you find what you're looking for!  What do you need to know today?
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="questions-container" >
-                    {% for q in questions %}
-                    {% include 'flo_chat.html' %}
-                    {% endfor %}
-                </div>
-                <div id="loading">
-                    <img src="{{ url_for('static', filename='processing.gif')}}" class='progress' alt="" />
-                </div>
+                    <div id="questions-container">
+                        {% for q in questions %}
+                            {% include 'flo_chat.html' %}
+                        {% endfor %}
+                    </div>
+                    <div id="loading">
+                        <img src="{{ url_for('static', filename='processing.gif')}}" class='progress' alt="" />
+                    </div>          
                 </div>
             </div>
             <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
-                <!-- <div class="input-group">
-                    <input type="text" class="form-control border-0" placeholder="How can we help?" id="question">
-                    <div class="input-group-text bg-transparent border-0">
-                        <button class="btn btn-light text-primary">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div> -->
                 <form id="question-form" class="form-inline">
                     <div class="input-group">
                         <input type="text" id="question" name="question" class="form-control" placeholder="Ask your question!" required>
